@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import yh.simplejwt.restjwt.advice.exception.CustomUserNotFoundException;
 import yh.simplejwt.restjwt.entity.User;
 import yh.simplejwt.restjwt.entity.UserAuth;
 import yh.simplejwt.restjwt.network.Header;
@@ -31,7 +32,7 @@ public class UserController {
     @ApiOperation(value = "회원 조회", notes = "회원 번호로 회원을 조회")
     @GetMapping(value = "/{userNum}")
     public SingleResult<User> findUserById(@ApiParam(value = "회원ID", required = true) @PathVariable long userNum) {
-        return responseService.getSingleResult(userRepository.findById(userNum).orElse(null));
+        return responseService.getSingleResult(userRepository.findById(userNum).orElseThrow(CustomUserNotFoundException::new));
     }
 
     @ApiOperation(value = "회원 가입", notes = "회원으로 가입")
