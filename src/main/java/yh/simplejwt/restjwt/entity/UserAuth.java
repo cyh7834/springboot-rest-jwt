@@ -1,25 +1,24 @@
 package yh.simplejwt.restjwt.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"user"})
-public class UserAuth {
+@Builder
+public class UserAuth extends CommonDate{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userNum;
 
     private String authority;
-
-    @OneToOne
-    @JoinColumn(name = "user_num")
-    private User user;
 }
