@@ -1,9 +1,8 @@
 package yh.simplejwt.restjwt.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import yh.simplejwt.restjwt.advice.exception.CustomUserNotFoundException;
 import yh.simplejwt.restjwt.entity.User;
@@ -22,13 +21,20 @@ public class UserController {
 
     private final UserRepository userRepository;
     private final ResponseService responseService;
+    private final PasswordEncoder passwordEncoder;
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "JWT", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "모든 회원 조회", notes = "모든 회원을 조회")
     @GetMapping(value = "")
     public ListResult<User> findAllUser() {
         return responseService.getListResult(userRepository.findAll());
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "JWT", required = false, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 조회", notes = "회원 번호로 회원을 조회")
     @GetMapping(value = "/{userNum}")
     public SingleResult<User> findUserById(@ApiParam(value = "회원ID", required = true) @PathVariable long userNum) {
@@ -47,7 +53,7 @@ public class UserController {
 
         userRepository.save(user.builder()
                 .id(id)
-                .password(password)
+                .password(passwordEncoder.encode(password))
                 .email(email)
                 .nickname(nickName)
                 .userAuth(userAuth)
@@ -56,6 +62,9 @@ public class UserController {
         return responseService.getSuccessResult();
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "JWT", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 수정", notes = "회원 정보를 수정")
     @PutMapping(value = "")
     public SingleResult<User> modify(
@@ -75,6 +84,9 @@ public class UserController {
         return null;
     }
 
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "JWT", required = true, dataType = "String", paramType = "header")
+    })
     @ApiOperation(value = "회원 삭제", notes = "회원 번호로 회원정보를 삭제")
     @DeleteMapping(value = "/{userNum}")
     public Header delete(@ApiParam(value = "회원 번호", required = true) @PathVariable long userNum) {
