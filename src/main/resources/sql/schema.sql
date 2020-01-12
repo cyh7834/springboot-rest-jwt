@@ -13,3 +13,19 @@ create table user_auth(
     registered_at DATETIME default (CURRENT_TIMESTAMP),
     updated_at DATETIME default (CURRENT_TIMESTAMP)
 );
+create table board(
+    board_num INT IDENTITY(1,1) primary key,
+    title varchar2(40) not null,
+    content varchar2(1500),
+    user_num INT CONSTRAINT board_email_fk REFERENCES user(user_num) on delete set null,
+    registered_at DATETIME default (CURRENT_TIMESTAMP),
+    updated_at DATETIME default (CURRENT_TIMESTAMP)
+);
+create table reply(
+    reply_num INT IDENTITY(1,1) primary key,
+    board_num INT CONSTRAINT reply_board_num_fk REFERENCES board(board_num) on delete set null,
+    user_num INT CONSTRAINT reply_user_num_fk REFERENCES user(user_num) on delete set null,
+    content varchar2(500) not null,
+    registered_at DATETIME default (CURRENT_TIMESTAMP),
+    updated_at DATETIME default (CURRENT_TIMESTAMP)
+);
