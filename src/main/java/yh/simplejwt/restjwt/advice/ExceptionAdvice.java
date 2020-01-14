@@ -6,9 +6,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import yh.simplejwt.restjwt.advice.exception.CustomAuthenticationEntryPointException;
-import yh.simplejwt.restjwt.advice.exception.CustomLoginFailedException;
-import yh.simplejwt.restjwt.advice.exception.CustomUserNotFoundException;
+import yh.simplejwt.restjwt.advice.exception.*;
 import yh.simplejwt.restjwt.network.Header;
 import yh.simplejwt.restjwt.service.ResponseService;
 
@@ -38,5 +36,17 @@ public class ExceptionAdvice {
     @ExceptionHandler(AccessDeniedException.class)
     public Header AccessDeniedException(HttpServletRequest request, AccessDeniedException e) {
         return responseService.getFailResult(-1, "해당 권한으로는 접근할 수 없습니다.");
+    }
+
+    @ExceptionHandler(CustomNotOwnerException.class)
+    @ResponseStatus(HttpStatus.NON_AUTHORITATIVE_INFORMATION)
+    public Header notOwnerException(HttpServletRequest request, CustomNotOwnerException e) {
+        return responseService.getFailResult(-1, "해당 리소스의 소유자가 아닙니다.");
+    }
+
+    @ExceptionHandler(CustomResourceNotExistException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public Header resourceNotExistException(HttpServletRequest request, CustomResourceNotExistException e) {
+        return responseService.getFailResult(-1, "리소스가 존재하지 않습니다.");
     }
 }
