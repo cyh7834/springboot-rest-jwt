@@ -13,7 +13,7 @@ import yh.simplejwt.restjwt.network.SingleResult;
 import yh.simplejwt.restjwt.repository.UserRepository;
 import yh.simplejwt.restjwt.service.ResponseService;
 
-@Api(tags = {"1. User"})
+@Api(tags = {"2. User"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
@@ -35,7 +35,7 @@ public class UserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "JWT", required = false, dataType = "String", paramType = "header")
     })
-    @ApiOperation(value = "회원 조회", notes = "회원 번호로 회원을 조회")
+    @ApiOperation(value = "회원 검색", notes = "회원 번호로 회원을 검색")
     @GetMapping(value = "/{userNum}")
     public SingleResult<User> findUserById(@ApiParam(value = "회원ID", required = true) @PathVariable long userNum) {
         return responseService.getSingleResult(userRepository.findById(userNum).orElseThrow(CustomUserNotFoundException::new));
