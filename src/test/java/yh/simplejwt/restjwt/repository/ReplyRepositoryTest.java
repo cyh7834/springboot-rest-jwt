@@ -8,6 +8,7 @@ import yh.simplejwt.restjwt.entity.Board;
 import yh.simplejwt.restjwt.entity.Reply;
 import yh.simplejwt.restjwt.entity.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ReplyRepositoryTest extends RestJwtApplicationTests {
@@ -50,5 +51,23 @@ public class ReplyRepositoryTest extends RestJwtApplicationTests {
         });
         Assert.assertTrue(reply.isPresent());
 
+    }
+
+    @Test
+    public void findByTitleLike() {
+        List<Reply> replyList = replyRepository.findByContentIgnoreCaseLike("%user%");
+
+        replyList.forEach(reply -> {
+            System.out.println(reply.getContent());
+        });
+    }
+
+    @Test
+    public void findByBoardNum() {
+        List<Reply> replyList = replyRepository.findByBoardBoardNum(1);
+
+        replyList.forEach(reply -> {
+            System.out.println(reply.getContent());
+        });
     }
 }
